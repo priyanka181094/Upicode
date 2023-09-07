@@ -15,7 +15,8 @@ import static com.bhim.npci.genericutility.UtilityObjectClass.*;
  * @author piyus
  * This class is used to perform all android driver related operations
  */
-public class AndroidDriverUtility{
+public class AndroidDriverUtility
+{
 
 	
 	/**
@@ -103,9 +104,11 @@ public class AndroidDriverUtility{
 	 */
 	public void getContexts() {
 		Set<String> contextID = getDriver().getContextHandles();
-		for (String string : contextID) {
-			System.out.println(string);
+		for (String id : contextID) {
+			System.out.println(id);
+			getDriver().context(id);
 		}
+		
 	}
 
 	/**

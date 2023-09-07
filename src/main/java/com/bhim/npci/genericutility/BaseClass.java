@@ -39,7 +39,8 @@ import io.appium.java_client.service.local.AppiumServiceBuilder;
  * @author piyus
  * This class contains all configuration annotattion annotated methods
  */
-public class BaseClass {
+public class BaseClass 
+{
 	public WebDriverWait wait;
 	public PasscodePage passCode;
 	public HomePage home;

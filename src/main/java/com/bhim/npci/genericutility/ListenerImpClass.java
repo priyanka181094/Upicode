@@ -1,6 +1,7 @@
 package com.bhim.npci.genericutility;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -26,8 +27,8 @@ import com.bhim.npci.pomrepository.PasscodePage;
  * This class is used to capture the run time events
  */
 public class ListenerImpClass implements ITestListener{
-	ExtentReports report;
-	ExtentTest test;
+	ExtentReports report;//to create report
+	ExtentTest test;//reson of failure print  to write extent report,to take scrrenshot
 
 	/**
 	 * @author Priyanka
@@ -36,7 +37,7 @@ public class ListenerImpClass implements ITestListener{
 	
 	public void onTestStart(ITestResult result) {
 		String testName = result.getMethod().getMethodName();
-		test = report.createTest(testName);
+		test = report.createTest(testName);//initialize return testype of object
 		UtilityObjectClass.setExtentTest(test);
 		PasscodePage passCode=new PasscodePage();
 		passCode.verifyPasscodePageHeader();
@@ -55,7 +56,7 @@ public class ListenerImpClass implements ITestListener{
 	public void onTestSuccess(ITestResult result) {
 		String testName = result.getMethod().getMethodName();
 		test.log(Status.PASS, testName + "---------PASS");
-		Reporter.log(testName + "--------EXECUTED SUCCESSFULLY");
+		//Reporter.log(testName + "--------EXECUTED SUCCESSFULLY");
 		
 	}
 
@@ -67,19 +68,23 @@ public class ListenerImpClass implements ITestListener{
 	public void onTestFailure(ITestResult result) {
 		String testName = result.getMethod().getMethodName();
 		test.log(Status.FAIL, testName + "---------FAIL");
-		test.log(Status.INFO, result.getThrowable());
-		Reporter.log(testName + "--------EXECUTION FAILED");
+		test.log(Status.INFO, result.getThrowable());//log result //
+		//Reporter.log(testName + "--------EXECUTION FAILED");
 		TakesScreenshot ts = (TakesScreenshot) UtilityObjectClass.getDriver();
 		File src = ts.getScreenshotAs(OutputType.FILE);
 		File dest = new File(
 				"./errorShots/" + testName + LocalDateTime.now().toString().replace(":", "_") + ".png");
-		try {
-			FileUtils.copyFile(src, dest);
+		
+			try {
+				FileUtils.copyFile(src, dest);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			test.addScreenCaptureFromPath(dest.getAbsolutePath());
-		} catch (Exception e) {
-
+	
 		}
-	}
+	
 
 	/**
 	 * @author Priyanka
@@ -109,6 +114,7 @@ public class ListenerImpClass implements ITestListener{
 	
 	public void onStart(ITestContext context) {
 		ExtentSparkReporter htmlReport = new ExtentSparkReporter("./Extent Reports/"+LocalDateTime.now().toString().replace(':', '_')+".html");
+		//after storing the htmlfile report
 		htmlReport.config().setDocumentTitle("Bhim Document");
 		htmlReport.config().setReportName("Bhim Extent Report");
 		htmlReport.config().setTheme(Theme.STANDARD);
